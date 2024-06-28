@@ -2,6 +2,7 @@ from ninja.orm import create_schema
 from core.models import Financial_Account, Financial_Transaction, Expense_Category, Budget
 from datetime import date, datetime
 from ninja import Schema
+from pydantic import BaseModel
 
 class FinancialAccountSchema(Schema):
     account_name: str
@@ -13,7 +14,7 @@ class ExpenseCategorySchema(Schema):
     category_description: str
     value: float
 
-class FinancialTransactionSchema(Schema):
+class FinancialTransactionSchema(BaseModel):
     date: datetime
     transaction_type: str
     transaction_value: float

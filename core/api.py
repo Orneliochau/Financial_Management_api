@@ -39,3 +39,12 @@ def get_transaction_by_id(request, financial_id:int):
         return transaction
     except Financial_Transaction.DoesNotExist:
         raise HttpError(404, "No found financial transaction")
+    
+
+@api.put("/{financial_id}", response=FinancialTransactionSchema)
+def update_finances(request, financial_id:int, data:FinancialTransactionSchema):
+    finance = get_object_or_404(Financial_Transaction, id=financial_id)
+    for attr, value in data.dict().items():
+        setattr(finance, attr, value)
+        finance.save()
+        return data
