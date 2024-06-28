@@ -14,7 +14,7 @@ class ExpenseCategorySchema(Schema):
     category_description: str
     value: float
 
-class FinancialTransactionSchema(BaseModel):
+class FinancialTransactionSchema(Schema):
     date: datetime
     transaction_type: str
     transaction_value: float

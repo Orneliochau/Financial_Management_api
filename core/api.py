@@ -48,3 +48,13 @@ def update_finances(request, financial_id:int, data:FinancialTransactionSchema):
         setattr(finance, attr, value)
         finance.save()
         return data
+
+
+@api.delete('/delete/{finances_id}', response=FinancialTransactionSchema)
+def delete_finances(request, finances_id: int):
+    try:
+        finance = Financial_Transaction.objects.get(id=finances_id)
+        finance.delete()
+        return JsonResponse({"Sucess": True})
+    except Financial_Transaction.DoesNotExist:
+        raise HttpError(404, 'not found financial transaction ')
