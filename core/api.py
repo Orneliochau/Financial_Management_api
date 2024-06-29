@@ -27,7 +27,7 @@ def create_financial(request, data: FinancialTransactionSchema)->FinancialTransa
 
         return financial_transaction
 
-@api.get("finances", response=List[FinancialTransactionSchema], tags=["Financial_Transaction"])
+@api.get("finances", response=List[FinancialTransactionSchema])
 def get_all_finances(request):
     finances = Financial_Transaction.objects.all()
     return finances
