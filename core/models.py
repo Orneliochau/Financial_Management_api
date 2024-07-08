@@ -21,7 +21,6 @@ class Financial_Transaction(models.Model):
     transaction_value = models.DecimalField(max_digits=10, decimal_places=2)
     transaction_description = models.CharField(max_length=300)
     financial_account = models.ForeignKey(Financial_Account, on_delete=models.CASCADE)
-    expense_category = models.ForeignKey(Expense_Category, on_delete=models.CASCADE)
     def __str__(self) -> str:
         return self.transaction_value
 

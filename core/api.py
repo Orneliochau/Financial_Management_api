@@ -1,11 +1,12 @@
 from ninja import NinjaAPI
-from core.schemas import FinancialTransactionSchema, FinancialAccountSchema, ExpenseCategorySchema
+from core.schemas import FinancialTransactionSchema, FinancialAccountSchema, ExpenseCategorySchema, FinancialFilter
 from core.models import *
 from django.shortcuts import get_object_or_404
 from ninja.errors import HttpError
 from django.http import JsonResponse
 from django.db import transaction
 from typing import List
+from ninja import Query
 
 api = NinjaAPI()
 
@@ -15,14 +16,12 @@ api = NinjaAPI()
 def create_financial(request, data: FinancialTransactionSchema)->FinancialTransactionSchema:
     with transaction.atomic():
         financial_account = Financial_Account.objects.create(**data.financial_account.dict())
-        expense_category = Expense_Category.objects.create(**data.expense_category.dict())
         financial_transaction = Financial_Transaction.objects.create(
             date = data.date,
             transaction_type = data.transaction_type,
             transaction_value = data.transaction_value,
             transaction_description = data.transaction_description,
             financial_account = financial_account,
-            expense_category = expense_category
         )
 
         return financial_transaction
@@ -58,3 +57,16 @@ def delete_finances(request, finances_id: int):
         return JsonResponse({"Sucess": True})
     except Financial_Transaction.DoesNotExist:
         raise HttpError(404, 'not found financial transaction ')
+    
+@api.post('create/financial-account')
+def create_expense(request, data:ExpenseCategorySchema)->ExpenseCategorySchema:
+    expense = Expense_Category.objects.create(**data.dict())
+    return expense
+
+
+    
+@api.get('expenses', response=FinancialFilter)
+def search_financial_transactions(request, filters:FinancialFilter = Query(...)):
+    transaction = Financial_Transaction.objects.all()
+    transaction = filters.filter(transaction)
+    return transaction

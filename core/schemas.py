@@ -1,8 +1,9 @@
 from ninja.orm import create_schema
 from core.models import Financial_Account, Financial_Transaction, Expense_Category, Budget
 from datetime import date, datetime
-from ninja import Schema
+from ninja import Schema, FilterSchema, Field
 from pydantic import BaseModel
+from typing import Optional
 
 class FinancialAccountSchema(Schema):
     account_name: str
@@ -20,7 +21,10 @@ class FinancialTransactionSchema(Schema):
     transaction_value: float
     transaction_description: str
     financial_account: FinancialAccountSchema
-    expense_category: ExpenseCategorySchema
+
+class FinancialFilter(FilterSchema):
+    transaction_description: Optional[str] = Field(None, q = 'transaction_description__icontains')
+    
 
 
 
