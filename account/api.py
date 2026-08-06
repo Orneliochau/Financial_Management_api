@@ -14,7 +14,7 @@ def create_user(request, data:CreateUserSchema)->JsonResponse:
     user, created = create_or_get_user(data.email)
     user_data = {'id':user.id, 'name':user.first_name, 'last_name':user.last_name}
     if created:
-        message = 'User created sucesfuly'
+        message = 'User created successfully'
     else:
         message = 'error'
     return JsonResponse({'user_name':user.first_name,
